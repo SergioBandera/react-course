@@ -1,57 +1,71 @@
 import React, { Component } from "react";
 import {
-    Card,
-    CardImg,
-    CardImgOverlay,
-    CardText,
-    CardBody,
-    CardTitle,
-  } from "reactstrap";
+  Card,
+  CardImg,
+  CardImgOverlay,
+  CardText,
+  CardBody,
+  CardTitle,
+} from "reactstrap";
 
-class DishDetail extends Component {
-  constructor(props) {
-    super(props);
-  }
-    renderDish(dish) {
-    if (dish != null)
-      return (
-        <Card>
-          <CardImg top src={dish.image} alt={dish.name} />
-          <CardBody>
-            <CardTitle>{dish.name}</CardTitle>
-            <CardText>{dish.description}</CardText>
-          </CardBody>
-        </Card>
-      );
-    else return <div></div>;
-  }
-
-
-
-
-  render() {
-    const propDish = this.props.dish;
-    
-    // const propDish = this.props.dish.map ((dish) => {
-    //     <>
-    //     <p>vale</p>
-    //     </>
-
-    // })
-
-
-    return (
-        <div className="row">
-        <div className="col-12 col-md-5 m-1">
-          {this.renderDish(this.props.dish)}
-        </div>
-        <div>
-            {propDish ? 
-            <Card><p>{propDish.name}</p></Card> : <div></div>
-            }
-        </div>
-      </div>
-    );
-  }
+function RenderDish({ dish }) {
+  return (
+    <div className="col-12 col-md-5 m-1">
+      <Card>
+        <CardImg top src={dish.image} alt={dish.name} />
+        <CardBody>
+          <CardTitle>{dish.name}</CardTitle>
+          <CardText>{dish.description}</CardText>
+        </CardBody>
+      </Card>
+    </div>
+  );
 }
+
+function RenderComments({comments}) {
+  console.log(comments)
+  return (
+    <div className="col-12 col-md-5 m-1">
+      <h4>Comments</h4>
+      <ul className="list-unstyled">
+        {comments ? (
+          comments.map((coment, i) => {
+            const fecha = new Date(coment.date);
+            return (
+              <li key={i} className="list-unstyled">
+                <p>{coment.comment}</p>
+                <p>
+                  {"-- " +
+                    coment.author +
+                    " , " +
+                    fecha.toString().slice(4, 15)}
+                </p>
+              </li>
+            );
+          })
+        ) : (
+          <div></div>
+        )}
+      </ul>
+    </div>
+  );
+}
+
+const DishDetail = (props) => {
+  if (props.dish != null) {
+    return (
+        <div className="container">
+
+        <div className="row">
+          <RenderDish dish={props.dish} />
+ 
+          <RenderComments comments={props.dish.comments} />
+        </div>
+        </div>
+
+      
+    );
+  } else return <div></div>;
+};
+
 export default DishDetail;
